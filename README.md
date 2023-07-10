@@ -73,7 +73,7 @@ Passing props to your component
 
 ### Emit Events
 
-Basically when you need get a event of custom component, you need to use emit function.
+Basically when you need to get a event of custom component, you need to use emit function.
 
 1.  first of all define emit on your custom component and pass to primitive component, you need to create a props to pass the data that gonna be changed
 
