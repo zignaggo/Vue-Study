@@ -119,3 +119,52 @@ const fields = reactive<{ email: string; password: string }>({
 	</div>
 </template>
 ```
+
+### Configure alias on project
+
+> how i using vite js, i need to configure the path alias and install the "Node Types" for typescript configuration
+
+-   install the Node Types
+
+    ```
+    npm i -D @types/node
+    ```
+
+-   Path alias on vite.config.ts
+
+```typescript
+import { defineConfig } from "vite"
+import vue from "@vitejs/plugin-vue"
+import * as path from "path"
+export default defineConfig({
+	plugins: [vue()],
+	resolve: {
+		alias: {
+			"@": path.resolve(__dirname, "./src/"),
+		},
+	},
+})
+```
+
+-   tsconfig.json configuration
+
+```json
+{
+	"compilerOptions": {
+		// rest of tsfile...
+		"paths": {
+			"@/*": ["./src/*"]
+		}
+	}
+}
+```
+
+### Custom Components: Children
+
+-   To pass children to your custom component, use the tag <slot>
+
+```vue
+<template>
+	<slot></slot>
+</template>
+```

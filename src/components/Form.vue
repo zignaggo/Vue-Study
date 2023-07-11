@@ -1,12 +1,34 @@
 <script setup lang="ts">
-defineProps<{ email: string; password: string }>()
-defineEmits(["update:email", "update:password"])
+import { Field, ErrorMessage, Form } from "vee-validate"
+import { toTypedSchema } from "@vee-validate/zod"
+import * as zod from "zod"
+
+const validationSchema = toTypedSchema(
+	zod.object({
+		email: zod
+			.string()
+			.nonempty("This is required")
+			.email({ message: "Must be a valid email" }),
+		password: zod
+			.string()
+			.nonempty("This is required")
+			.min(8, { message: "Too short" }),
+	})
+)
+function onSubmit(values: {}) {
+	alert(JSON.stringify(values, null, 2))
+}
 </script>
 
 <template>
-	<form class="space-y-6 w-full max-w-xl">
-		{{ email }}
-		{{ password }}
+	<Form
+		class="space-y-6 w-full max-w-xl px-6 py-12 lg:px-8"
+		:validation-schema="validationSchema"
+		@submit="onSubmit"
+	>
+		<h2 class="text-2xl font-bold text-blue-950">
+			Conecte-se em sua Conta!
+		</h2>
 		<div>
 			<label
 				for="email"
@@ -14,22 +36,14 @@ defineEmits(["update:email", "update:password"])
 				>Email address</label
 			>
 			<div class="mt-2">
-				<input
-					:value="email"
-					@input="
-						$emit(
-							'update:email',
-							($event.target as HTMLInputElement).value
-						)
-					"
-					id="email"
+				<Field
 					name="email"
 					type="email"
 					autocomplete="email"
-					required
-					class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+					class="block w-full rounded-md indent-3 border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 				/>
 			</div>
+			<ErrorMessage name="email" />
 		</div>
 
 		<div>
@@ -48,34 +62,25 @@ defineEmits(["update:email", "update:password"])
 				</div>
 			</div>
 			<div class="mt-2">
-				<input
-					:value="password"
-					@input="
-						$emit(
-							'update:password',
-							($event.target as HTMLInputElement).value
-						)
-					"
-					id="password"
+				<Field
 					name="password"
 					type="password"
 					autocomplete="current-password"
-					required
-					class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+					class="block w-full rounded-md indent-3 border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 				/>
 			</div>
+			<ErrorMessage name="password" />
 		</div>
 
 		<div>
 			<button
-				type="button"
-				@click="$emit('testeClick')"
+				type="submit"
 				class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 			>
 				Sign in
 			</button>
 		</div>
-	</form>
+	</Form>
 </template>
 
 <style scoped>
